@@ -1,5 +1,5 @@
 # My Express Server
-Этот проект представляет собой сервер, разработанный с использованием Node.js и Express.js. Сервер имеет маршруты для работы с пользователями и статьями.
+Этот проект представляет собой сервер, разработанный с использованием Node.js и Express.js. Сервер предоставляет маршруты для работы с пользователями и статьями, позволяя выполнять операции чтения, создания, обновления и удаления данных.
 
 ## Требования:
 - Node.js v12 или новее<br>
@@ -12,23 +12,26 @@ npm install или yarn install
 npm start или yarn start
 
 ## Маршруты:
-Корневой маршрут:<br>
-GET / - возвращает "Get root route"<br>
 
-Маршруты пользователей:<br>
-GET /users - возвращает "Get users route"<br>
-POST /users - возвращает "Post users route"<br>
-GET /users/:userId - возвращает "Get user by Id route: {userId}"<br>
-PUT /users/:userId - возвращает "Put user by Id route: {userId}"<br>
-DELETE /users/:userId - возвращает "Delete user by Id route: {userId}"<br>
+### Корневой маршрут:
+GET /: Возвращает "Get root route".
 
-Маршруты статей:<br>
-GET /articles - возвращает "Get articles route"<br>
-POST /articles - возвращает "Post articles route"<br>
-GET /articles/:articleId - возвращает "Get article by Id route: {articleId}"<br>
-PUT /articles/:articleId - возвращает "Put article by Id route: {articleId}"<br>
-DELETE /articles/:articleId - возвращает "Delete article by Id route: {articleId}"<br>
+### Маршруты пользователей:
+GET /users: Возвращает список всех пользователей.<br>
+POST /users: Создает нового пользователя.<br>
+GET /users/:userId: Возвращает информацию о пользователе с указанным идентификатором.<br>
+PUT /users/:userId: Обновляет информацию о пользователе с указанным идентификатором.<br>
+DELETE /users/:userId: Удаляет пользователя с указанным идентификатором.<br>
 
-## Тестирование:
-Для тестирования используйте инструменты, такие как Postman.
+### Маршруты статей:
+GET /articles: Возвращает список всех статей.<br>
+POST /articles: Создает новую статью.<br>
+GET /articles/:articleId: Возвращает информацию о статье с указанным идентификатором.<br>
+PUT /articles/:articleId: Обновляет информацию о статье с указанным идентификатором.<br>
+DELETE /articles/:articleId: Удаляет статью с указанным идентификатором.<br>
 
+## Тестирование с помощью Postman:
+1. Запустите сервер командой `npm start` или `yarn start`.<br>
+2. Откройте Postman и создайте новый запрос.<br>
+3. Укажите метод запроса, URL и, при необходимости, параметры запроса.<br>
+4. Отправьте запрос на сервер и просмотрите ответ.<br>

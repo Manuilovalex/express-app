@@ -1,18 +1,16 @@
 import express from 'express'
-import morgan from 'morgan'
 import router from './routes/index.mjs'
+import { errorHandler } from './middlewares/errorHandler.mjs'
+import { logger } from './middlewares/logger.mjs'
 
-const PORT = 3000
+const PORT = process.env.PORT || 3000
 const app = express()
 
-app.use(morgan('dev'))
+app.use(logger)
 
+app.use(express.json())
 app.use(router)
-
-app.use((err, req, res, next) => {
-  console.error(err.stack)
-  res.status(500).send('Error')
-})
+app.use(errorHandler)
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`)
