@@ -25,7 +25,7 @@ const getArticleByIdHandler = (req, res) => {
     return res.status(400).send('Article ID must be a number')
   }
 
-  const article = articles.find((a) => a.id === articleId)
+   const article = articles.find((a) => a.id === articleId)
 
   if (!article) {
     return res.status(404).send(`Article with id ${articleId} not found`)

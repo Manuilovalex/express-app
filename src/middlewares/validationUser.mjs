@@ -1,8 +1,15 @@
-export const validateUserData = (req, res, next) => {
-  const { username, email } = req.body
+import Joi from 'joi'
 
-  if (!username || !email) {
-    return res.status(400).send('Invalid data. Username and email are required.')
+const userSchema = Joi.object({
+  username: Joi.string().required().min(3).max(20),
+  email: Joi.string().email().required()
+})
+
+export const validateUserData = (req, res, next) => {
+  const { error } = userSchema.validate(req.body)
+
+  if (error) {
+    return res.status(400).send(`error: ${error.message}`)
   }
 
   next()

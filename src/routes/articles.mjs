@@ -8,15 +8,19 @@ import {
 } from '../controllers/articles.mjs'
 import { validateArticleData } from '../middlewares/validateArticle.mjs'
 import { checkArticlesEmpty } from '../middlewares/checkArticlesEmpty.mjs'
+import { authorizeArticleAccess } from '../middlewares/authorizeArticleAccess.mjs'
 
 const articlesRouter = Router()
 
-articlesRouter.route('/').get(checkArticlesEmpty, getArticlesHandler).post(validateArticleData, postArticlesHandler)
+articlesRouter
+  .route('/')
+  .get(authorizeArticleAccess, checkArticlesEmpty, getArticlesHandler)
+  .post(authorizeArticleAccess, validateArticleData, postArticlesHandler)
 
 articlesRouter
   .route('/:articleId')
-  .get(getArticleByIdHandler)
-  .delete(deleteArticleByIdHandler)
-  .put(validateArticleData,  putArticleByIdHandler)
+  .get(authorizeArticleAccess, getArticleByIdHandler)
+  .delete(authorizeArticleAccess, deleteArticleByIdHandler)
+  .put(authorizeArticleAccess, validateArticleData, putArticleByIdHandler)
 
 export default articlesRouter
