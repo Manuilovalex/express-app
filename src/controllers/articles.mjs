@@ -12,6 +12,7 @@ const postArticlesHandler = (req, res) => {
   if (!title || !content) {
     return res.status(400).send('Invalid data. Title and content are required.')
   }
+
   const newArticle = { id: newId, title, content }
   articles.push(newArticle)
   res.status(201).send(newArticle)
@@ -19,33 +20,55 @@ const postArticlesHandler = (req, res) => {
 
 const getArticleByIdHandler = (req, res) => {
   const articleId = parseInt(req.params['articleId'])
+
+  if (isNaN(articleId)) {
+    return res.status(400).send('Article ID must be a number')
+  }
+
   const article = articles.find((a) => a.id === articleId)
+
   if (!article) {
     return res.status(404).send(`Article with id ${articleId} not found`)
   }
+
   res.send(article)
 }
 
 const deleteArticleByIdHandler = (req, res) => {
   const articleId = parseInt(req.params['articleId'])
+
+  if (isNaN(articleId)) {
+    return res.status(400).send('Article ID must be a number')
+  }
+
   const article = articles.find((a) => a.id === articleId)
+
   if (!article) {
     return res.status(404).send(`Article with id ${articleId} not found`)
   }
+
   articles = articles.filter((a) => a.id !== articleId)
   res.send(`Article with id ${articleId} deleted`)
 }
 
 const putArticleByIdHandler = (req, res) => {
   const articleId = parseInt(req.params['articleId'])
+
+  if (isNaN(articleId)) {
+    return res.status(400).send('Article ID must be a number')
+  }
+
   const { title, content } = req.body
   const articleIndex = articles.findIndex((a) => a.id === articleId)
+
   if (articleIndex === -1) {
     return res.status(404).send(`Article with id ${articleId} not found`)
   }
+
   if (!title || !content) {
     return res.status(400).send('Invalid data. Title and content are required.')
   }
+
   articles[articleIndex] = { id: articleId, title, content }
   res.send(articles[articleIndex])
 }
