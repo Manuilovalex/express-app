@@ -28,6 +28,10 @@ const getArticleByIdHandler = (req, res) => {
 
 const deleteArticleByIdHandler = (req, res) => {
   const articleId = parseInt(req.params['articleId'])
+  const article = articles.find((a) => a.id === articleId)
+  if (!article) {
+    return res.status(404).send(`Article with id ${articleId} not found`)
+  }
   articles = articles.filter((a) => a.id !== articleId)
   res.send(`Article with id ${articleId} deleted`)
 }
