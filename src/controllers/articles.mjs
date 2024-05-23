@@ -1,15 +1,18 @@
-let articles = [] 
+export let articles = []
 
- const getArticlesHandler = (req, res) => {
+const getArticlesHandler = (req, res) => {
   res.send(articles)
 }
 
 const postArticlesHandler = (req, res) => {
   const { title, content } = req.body
+
+  const newId = articles.length > 0 ? Math.max(...articles.map((u) => u.id)) + 1 : 1
+
   if (!title || !content) {
     return res.status(400).send('Invalid data. Title and content are required.')
   }
-  const newArticle = { id: articles.length + 1, title, content }
+  const newArticle = { id: newId, title, content }
   articles.push(newArticle)
   res.status(201).send(newArticle)
 }
@@ -18,7 +21,7 @@ const getArticleByIdHandler = (req, res) => {
   const articleId = parseInt(req.params['articleId'])
   const article = articles.find((a) => a.id === articleId)
   if (!article) {
-    return res.status(404).send('Article not found')
+    return res.status(404).send(`Article with id ${articleId} not found`)
   }
   res.send(article)
 }
@@ -34,7 +37,7 @@ const putArticleByIdHandler = (req, res) => {
   const { title, content } = req.body
   const articleIndex = articles.findIndex((a) => a.id === articleId)
   if (articleIndex === -1) {
-    return res.status(404).send('Article not found')
+    return res.status(404).send(`Article with id ${articleId} not found`)
   }
   if (!title || !content) {
     return res.status(400).send('Invalid data. Title and content are required.')

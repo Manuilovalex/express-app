@@ -6,16 +6,17 @@ import {
   postArticlesHandler,
   putArticleByIdHandler
 } from '../controllers/articles.mjs'
-import { checkArticleAccess } from '../middlewares/accessControl.mjs'
+import { validateArticleData } from '../middlewares/validateArticle.mjs'
+import { checkArticlesEmpty } from '../middlewares/checkArticlesEmpty.mjs'
 
 const articlesRouter = Router()
 
-articlesRouter.route('/').get(getArticlesHandler).post(postArticlesHandler)
+articlesRouter.route('/').get(checkArticlesEmpty, getArticlesHandler).post(validateArticleData, postArticlesHandler)
 
 articlesRouter
   .route('/:articleId')
-  .get(checkArticleAccess, getArticleByIdHandler)
-  .delete(checkArticleAccess, deleteArticleByIdHandler)
-  .put(checkArticleAccess, putArticleByIdHandler)
+  .get(getArticleByIdHandler)
+  .delete(deleteArticleByIdHandler)
+  .put(validateArticleData,  putArticleByIdHandler)
 
 export default articlesRouter

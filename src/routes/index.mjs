@@ -8,5 +8,4 @@ const router = Router()
 router.use('/', rootHandler)
 router.use('/users', usersRouter)
 router.use('/articles', articlesRouter)
-
 export default router

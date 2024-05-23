@@ -10,6 +10,13 @@ app.use(logger)
 
 app.use(express.json())
 app.use(router)
+
+app.use((req, res, next) => {
+  const error = new Error('Route not found')
+  error.status = 404
+  next(error)
+})
+
 app.use(errorHandler)
 
 app.listen(PORT, () => {
