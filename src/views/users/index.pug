@@ -1,0 +1,21 @@
+doctype html
+html
+  head
+    title Users
+    link(rel="stylesheet", href="/css/style.css")
+  body
+    .container
+    h1 App Express & PUG & EJS
+      h2 Users
+      
+      ul
+        each user in users
+          li
+            a(href=`/users/${user.id}`) #{`user id: ${user.id}`}
+
+      button(onclick="goBack()") Назад
+            
+    script.
+      function goBack() {
+        window.history.back();
+      }

@@ -1,11 +1,13 @@
-import { Router } from 'express'
-import rootHandler from './root.mjs'
-import usersRouter from './users.mjs'
-import articlesRouter from './articles.mjs'
+import { Router } from 'express';
+import { getRootHandler } from '../controllers/root.mjs';
+import usersRouter from './users.mjs';
+import articlesRouter from './articles.mjs';
 
-const router = Router()
+const router = Router();
 
-router.use('/', rootHandler)
-router.use('/users', usersRouter)
-router.use('/articles', articlesRouter)
-export default router
+router.get('/', getRootHandler);
+
+router.use('/users', usersRouter);
+router.use('/articles', articlesRouter);
+
+export default router;

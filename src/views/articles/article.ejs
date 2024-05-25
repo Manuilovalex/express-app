@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    <%= article.title %>
+  </title>
+  <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+
+<body>
+  <div class="container">
+    <h2>
+      <%= article.title %>
+    </h2>
+
+    <p>
+      <%= article.content %>
+    </p>
+    <button onclick="goBack()">Назад</button>
+  </div>
+
+  <script>
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+</body>
+
+</html>
