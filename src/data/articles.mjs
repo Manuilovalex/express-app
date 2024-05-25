@@ -1,4 +1,4 @@
- export let articles = [
+export let articles = [
   {
     id: 1,
     title: 'Article',

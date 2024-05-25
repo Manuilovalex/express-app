@@ -1,4 +1,4 @@
-import { articles } from "../data/articles.mjs"
+import { articles } from '../data/articles.mjs'
 
 const getArticlesHandler = (req, res) => {
   res.render('articles/index.ejs', { articles })
@@ -40,13 +40,13 @@ const deleteArticleByIdHandler = (req, res) => {
     return res.status(400).send('Article ID must be a number')
   }
 
-  const article = articles.find((a) => a.id === articleId)
+  const articleIndex = articles.findIndex((a) => a.id === articleId)
 
-  if (!article) {
+  if (articleIndex === -1) {
     return res.status(404).send(`Article with id ${articleId} not found`)
   }
 
-  articles = articles.filter((a) => a.id !== articleId)
+  articles.splice(articleIndex, 1)
   res.send(`Article with id ${articleId} deleted`)
 }
 
