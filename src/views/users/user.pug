@@ -1,0 +1,18 @@
+doctype html
+html
+  head
+    title #{user.username}
+    link(rel="stylesheet", href="/css/style.css")
+  body
+    .container
+      h2 #{user.username}
+
+      p User Id: #{user.id}
+      p Email: #{user.email}
+      
+      button(onclick="goBack()") Назад
+
+    script.
+      function goBack() {
+        window.history.back();
+      }

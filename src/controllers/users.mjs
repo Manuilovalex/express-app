@@ -1,12 +1,13 @@
-export let users = []
+import { users } from '../data/users.mjs'
 
 const getUsersHandler = (req, res) => {
-  res.status(200).send(users)
+  res.render('users/index.pug', { users })
 }
+
+let nextUserId = users.length > 0 ? Math.max(...users.map((u) => u.id)) + 1 : 1
 
 const postUsersHandler = (req, res) => {
   const { username, email } = req.body
-
   const newId = users.length > 0 ? Math.max(...users.map((u) => u.id)) + 1 : 1
 
   if (!username || !email) {
@@ -14,7 +15,6 @@ const postUsersHandler = (req, res) => {
   }
 
   const newUser = { id: newId, username, email }
-
   users.push(newUser)
   res.status(201).send(newUser)
 }
@@ -32,7 +32,7 @@ const getUserByIdHandler = (req, res) => {
     return res.status(404).send(`User with id ${userId} not found`)
   }
 
-  res.status(200).send(user)
+  res.render('users/user.pug', { user })
 }
 
 const deleteUserByIdHandler = (req, res) => {

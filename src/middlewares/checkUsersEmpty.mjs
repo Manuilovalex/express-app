@@ -1,4 +1,4 @@
-import { users } from "../controllers/users.mjs"
+import { users } from "../data/users.mjs"
 
 export const checkUsersEmpty = (req, res, next) => {
   if (users.length === 0) {

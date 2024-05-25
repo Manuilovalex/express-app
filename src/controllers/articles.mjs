@@ -1,12 +1,11 @@
-export let articles = []
+import { articles } from "../data/articles.mjs"
 
 const getArticlesHandler = (req, res) => {
-  res.send(articles)
+  res.render('articles/index.ejs', { articles })
 }
 
 const postArticlesHandler = (req, res) => {
   const { title, content } = req.body
-
   const newId = articles.length > 0 ? Math.max(...articles.map((u) => u.id)) + 1 : 1
 
   if (!title || !content) {
@@ -25,13 +24,13 @@ const getArticleByIdHandler = (req, res) => {
     return res.status(400).send('Article ID must be a number')
   }
 
-   const article = articles.find((a) => a.id === articleId)
+  const article = articles.find((a) => a.id === articleId)
 
   if (!article) {
     return res.status(404).send(`Article with id ${articleId} not found`)
   }
 
-  res.send(article)
+  res.render('articles/article.ejs', { article })
 }
 
 const deleteArticleByIdHandler = (req, res) => {

@@ -1,4 +1,4 @@
-import { articles } from "../controllers/articles.mjs"
+import { articles } from '../data/articles.mjs'
 
 export const checkArticlesEmpty = (req, res, next) => {
   if (articles.length === 0) {
