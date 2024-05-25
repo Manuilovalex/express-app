@@ -5,14 +5,12 @@ html
     link(rel="stylesheet", href="/css/style.css")
   body
     .container
-    h1 App Express & PUG
+      h1 App Express & PUG
       h2 Users
-      
       ul
         each user in users
           li
             a(href=`/users/${user.id}`) #{`user id: ${user.id}`}
-
       button(onclick="goBack()") Назад
             
     script.

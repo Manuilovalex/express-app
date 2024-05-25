@@ -1,4 +1,4 @@
-export let articles = [
+export const articles = [
   {
     id: 1,
     title: 'Article',
