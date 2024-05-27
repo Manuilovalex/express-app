@@ -1,23 +1,42 @@
+/* Общие стили */
 body {
-  display: block;
-  text-align: center;
+  display: flex;
+  align-items: center;
   justify-content: center;
   min-height: 100vh;
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #f0f0f0;
+}
+
+body.light {
+  background-color: #dad5d5;
+  color: #333;
+}
+
+body.dark {
+  background-color: #333;
+  color: #d4d1d1;
 }
 
 .container {
   text-align: center;
   background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+body.dark .container {
+  background-color: #444;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  a {
+    color: #c6c7c8;
+  }
 }
 
 h1 {
   margin-bottom: 20px;
+  font-size: 2em;
 }
 
 ul {
@@ -32,9 +51,39 @@ li {
 a {
   text-decoration: none;
   color: #2e6c92;
-  font-size: 20px;
+  font-size: 1.2em;
 }
 
 a:hover {
   text-decoration: underline;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #2e6c92;
+  color: #fff;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #1e4a61;
+}
+
+form {
+  margin-top: 20px;
+}
+
+label {
+  margin-right: 10px;
+  font-size: 1em;
+}
+
+select {
+  padding: 5px;
+  font-size: 1em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }

@@ -1,18 +1,20 @@
 doctype html
-html
+html(lang="en")
   head
-    title Users
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
     link(rel="stylesheet", href="/css/style.css")
-  body
+    link(rel="icon", href="/favicon.png", type="image/png")
+    title Users
+  body(class=theme)
     .container
       h1 App Express & PUG
       h2 Users
       ul
         each user in users
           li
-            a(href=`/users/${user.id}`) #{`user id: ${user.id}`}
+            a(href=`/users/${user.id}`) user id: #{user.id}
       button(onclick="goBack()") Назад
-            
     script.
       function goBack() {
         window.history.back();

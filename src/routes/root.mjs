@@ -6,3 +6,4 @@ const rootRouter = Router()
 rootRouter.route('/').get(getRootHandler)
 
 export default rootRouter
+
