@@ -3,10 +3,18 @@ import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import morgan from 'morgan'
 import cookieParser from 'cookie-parser'
+import session from 'express-session'
+import flash from 'connect-flash'
+import ejs from 'ejs'
+import { passport } from './config/passport-config.mjs'
 import router from './routes/index.mjs'
+import authRouter from './routes/authRoutes.mjs'
+import protectedRouter from './routes/protectedRoutes.mjs'
 import { errorHandler } from './middlewares/errorHandler.mjs'
 import { logger } from './middlewares/logger.mjs'
-import ejs from 'ejs'
+import { ensureAuthenticated } from './middlewares/authMiddleware.mjs'
+import usersRouter from './routes/users.mjs'
+import articlesRouter from './routes/articles.mjs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -15,7 +23,6 @@ const PORT = process.env.PORT || 3000
 const app = express()
 
 app.use(morgan('dev'))
-
 app.use(logger)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -23,17 +30,34 @@ app.use(cookieParser())
 app.use(express.static(join(__dirname, 'public')))
 
 app.set('views', join(__dirname, 'views'))
-
-app.set('view engine', 'pug')
-
+app.set('view engine', 'ejs')
 app.engine('ejs', ejs.renderFile)
+
+app.use(
+  session({
+    secret: 'key',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }
+  })
+)
+
+app.use(flash())
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use((req, res, next) => {
   res.locals.theme = req.cookies.theme || 'light'
+  res.locals.error = req.flash('error')
+  res.locals.user = req.user || null
   next()
 })
 
 app.use(router)
+app.use(authRouter)
+app.use(protectedRouter)
+app.use('/users', ensureAuthenticated, usersRouter)
+app.use('/articles', ensureAuthenticated, articlesRouter)
 
 app.post('/theme', (req, res) => {
   const { theme } = req.body

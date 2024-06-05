@@ -1,0 +1,14 @@
+[
+  {
+    "_id": "49cb9a38-b55e-4ed8-9169-686d3ad8298a",
+    "username": "admin",
+    "email": "Manuylovaleks@icloud.com",
+    "password": "$2a$10$vaaWC6T5C17UqSJ.RmmKcOd3C1o.R6yPOLqkh4G/LpKhk/7Fzhw46"
+  },
+  {
+    "_id": "3f04380f-71b0-44ce-ae96-4c342e6f80c0",
+    "username": "Alex",
+    "email": "Manuylov_aleks@ukr.net",
+    "password": "$2a$10$rMeBbBSpvAtVXs346HONiuntx8AkrEiBDRv1o4XakPKSh0hPv5sSK"
+  }
+]

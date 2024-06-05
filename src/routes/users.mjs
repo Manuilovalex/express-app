@@ -8,18 +8,19 @@ import {
 } from '../controllers/users.mjs'
 import { validateUserData } from '../middlewares/validationUser.mjs'
 import { checkUsersEmpty } from '../middlewares/checkUsersEmpty.mjs'
+import { ensureAuthenticated } from '../middlewares/authMiddleware.mjs'
 
 const usersRouter = Router()
 
 usersRouter
   .route('/')
-  .get(checkUsersEmpty, getUsersHandler)
-  .post(validateUserData, postUsersHandler)
+  .get(ensureAuthenticated, checkUsersEmpty, getUsersHandler)
+  .post(ensureAuthenticated, validateUserData, postUsersHandler)
 
 usersRouter
   .route('/:userId')
-  .get(getUserByIdHandler)
-  .delete(deleteUserByIdHandler)
-  .put(validateUserData, putUserByIdHandler)
+  .get(ensureAuthenticated, getUserByIdHandler)
+  .delete(ensureAuthenticated, deleteUserByIdHandler)
+  .put(ensureAuthenticated, validateUserData, putUserByIdHandler)
 
 export default usersRouter

@@ -14,7 +14,7 @@ html(lang="en")
         each user in users
           li
             a(href=`/users/${user.id}`) user id: #{user.id}
-      button(onclick="goBack()") Назад
+      button(onclick="goBack()") back
     script.
       function goBack() {
         window.history.back();
