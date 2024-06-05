@@ -32,7 +32,7 @@ authRouter.post('/login', (req, res, next) => {
   passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/login',
-    failureFlash: true // Включаем сообщения об ошибках
+    failureFlash: true 
   })(req, res, next)
 })
 

@@ -30,7 +30,7 @@ body.dark {
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 400px; /* Максимальная ширина контейнера */
+  max-width: 400px;
 }
 
 body.dark .container {
@@ -91,24 +91,23 @@ form {
 }
 
 label {
-  margin-bottom: 10px; /* Увеличенный отступ снизу */
-  font-size: 1em;
-  width: 100%; /* Занимает всю ширину */
-  text-align: left; /* Выравнивание текста по левому краю */
+  margin-bottom: 10px;
+  width: 100%;
+  text-align: left;
 }
 
 input,
 select {
-  padding: 12px; /* Увеличенный padding */
-  margin-bottom: 20px; /* Увеличенный отступ снизу */
+  padding: 12px;
+  margin-bottom: 20px;
   border-radius: 5px;
   border: 1px solid #ccc;
-  width: 100%; /* Занимает всю ширину */
+  width: 100%;
   box-sizing: border-box;
 }
 
 select {
-  font-size: 1.2em; /* Увеличенный размер шрифта */
+  font-size: 1.2em;
 }
 
 .authLink {
