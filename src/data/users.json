@@ -10,5 +10,11 @@
     "username": "Alex",
     "email": "Manuylov_aleks@ukr.net",
     "password": "$2a$10$rMeBbBSpvAtVXs346HONiuntx8AkrEiBDRv1o4XakPKSh0hPv5sSK"
+  },
+  {
+    "_id": "de602694-fb60-4657-9157-f271b9d8be64",
+    "username": "Sergey",
+    "email": "Manuylov_serj@ukr.net",
+    "password": "$2a$10$PTsPjnIFtmaHv5Vg.m9MjeVK5c4eII64BM9P1SaVT6irc369fghzK"
   }
 ]

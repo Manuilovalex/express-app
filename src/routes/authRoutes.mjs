@@ -1,8 +1,7 @@
 import { Router } from 'express'
 import { passport } from '../config/passport-config.mjs'
-import bcrypt from 'bcryptjs'
-import { createUser, findUserByEmailAndPassword } from '../services/userService.mjs'
-import { ensureAuthenticated, forwardAuthenticated } from '../middlewares/authMiddleware.mjs'
+import { createUser} from '../services/userService.mjs'
+import {forwardAuthenticated } from '../middlewares/authMiddleware.mjs'
 
 const authRouter = Router()
 
@@ -20,7 +19,7 @@ authRouter.post('/register', async (req, res, next) => {
     const user = await createUser({ username, email, password })
     req.login(user, (err) => {
       if (err) return next(err)
-      return res.redirect('/')
+      return res.redirect('/login')
     })
   } catch (error) {
     req.flash('error', 'Registration failed.')
@@ -32,7 +31,7 @@ authRouter.post('/login', (req, res, next) => {
   passport.authenticate('local', {
     successRedirect: '/',
     failureRedirect: '/login',
-    failureFlash: true 
+    failureFlash: true
   })(req, res, next)
 })
 
