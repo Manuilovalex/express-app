@@ -6,15 +6,9 @@
     "password": "$2a$10$vaaWC6T5C17UqSJ.RmmKcOd3C1o.R6yPOLqkh4G/LpKhk/7Fzhw46"
   },
   {
-    "_id": "3f04380f-71b0-44ce-ae96-4c342e6f80c0",
+    "_id": "7f170c4a-acac-4959-aea4-ea042351a78f",
     "username": "Alex",
     "email": "Manuylov_aleks@ukr.net",
-    "password": "$2a$10$rMeBbBSpvAtVXs346HONiuntx8AkrEiBDRv1o4XakPKSh0hPv5sSK"
-  },
-  {
-    "_id": "de602694-fb60-4657-9157-f271b9d8be64",
-    "username": "Sergey",
-    "email": "Manuylov_serj@ukr.net",
-    "password": "$2a$10$PTsPjnIFtmaHv5Vg.m9MjeVK5c4eII64BM9P1SaVT6irc369fghzK"
+    "password": "$2a$10$QdVuBt2K.8KCZmR.l8K.W.Idin8vIKO36gwsyU5cMnaFrVrMUgamS"
   }
 ]
