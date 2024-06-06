@@ -12,7 +12,7 @@ export function createUser({ username, email, password }) {
   const users = getUsersFromFile()
   const hashedPassword = bcrypt.hashSync(password, 10)
   const newUser = {
-    _id: uuidv4(), // Генерируем уникальный идентификатор
+    _id: uuidv4(),
     username,
     email,
     password: hashedPassword
@@ -27,13 +27,13 @@ export async function findUserByEmailAndPassword(email, password) {
     const users = getUsersFromFile()
     const user = users.find((user) => user.email === email)
     if (!user) {
-      return null // Пользователь с таким email не найден
+      return null
     }
     const passwordMatch = bcrypt.compareSync(password, user.password)
     if (!passwordMatch) {
-      return null // Пароль не совпадает
+      return null
     }
-    return user // Возвращаем пользователя, если email и password совпадают
+    return user
   } catch (error) {
     throw new Error(`Failed to find user by email and password: ${error.message}`)
   }
