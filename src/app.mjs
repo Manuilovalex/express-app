@@ -43,8 +43,8 @@ app.use(
 )
 
 app.use(flash())
-app.use(passport.initialize())
 app.use(passport.session())
+app.use(passport.initialize())
 
 app.use((req, res, next) => {
   res.locals.theme = req.cookies.theme || 'light'
@@ -53,11 +53,31 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use(router)
+// Middleware для проверки аутентификации и логирования
+app.use((req, res, next) => {
+  console.log('Current session:', req.session)
+  console.log('Current user:', req.user)
+  next()
+})
+
 app.use(authRouter)
-app.use(protectedRouter)
+
+app.use((req, res, next) => {
+  res.locals.user = req.user || null // доступ к текущему пользователю во всех шаблонах
+  next()
+})
+
 app.use('/users', ensureAuthenticated, usersRouter)
 app.use('/articles', ensureAuthenticated, articlesRouter)
+
+app.get('/', (req, res) => {
+  console.log('User:', req.user)
+  console.log('Session:', req.session)
+  res.render('index', { user: req.user })
+})
+
+app.use(router)
+app.use(protectedRouter)
 
 app.post('/theme', (req, res) => {
   const { theme } = req.body

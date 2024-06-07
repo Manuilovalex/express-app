@@ -1,6 +1,5 @@
 import passport from 'passport'
 import { Strategy as LocalStrategy } from 'passport-local'
-import bcrypt from 'bcryptjs'
 import { findUserByEmailAndPassword, findUserById } from '../services/userService.mjs'
 
 passport.use(
@@ -11,22 +10,24 @@ passport.use(
         return done(null, false, { message: 'Incorrect email or password.' })
       }
       return done(null, user)
-    } catch (error) {
-      return done(error)
+    } catch (err) {
+      return done(err)
     }
   })
 )
 
 passport.serializeUser((user, done) => {
-  done(null, user._id) // Сохраняем только _id пользователя
+  console.log('Serializing user:', user)
+  done(null, user._id)
 })
 
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await findUserById(id)
+    console.log('Deserialized user:', user)
     done(null, user)
-  } catch (error) {
-    done(error)
+  } catch (err) {
+    done(err)
   }
 })
 

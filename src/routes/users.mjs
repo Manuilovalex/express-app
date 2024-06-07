@@ -12,10 +12,27 @@ import { ensureAuthenticated } from '../middlewares/authMiddleware.mjs'
 
 const usersRouter = Router()
 
+usersRouter.route('/')
 usersRouter
   .route('/')
-  .get(ensureAuthenticated, checkUsersEmpty, getUsersHandler)
-  .post(ensureAuthenticated, validateUserData, postUsersHandler)
+  .get(
+    (req, res, next) => {
+      console.log('In /users route, isAuthenticated:', req.isAuthenticated(), req.user, req.session)
+      next()
+    },
+    checkUsersEmpty,
+    ensureAuthenticated,
+    getUsersHandler
+  )
+  .post(
+    (req, res, next) => {
+      console.log('In /users route POST, isAuthenticated:', req.isAuthenticated(), req.user, req.session)
+      next()
+    },
+    validateUserData,
+    ensureAuthenticated,
+    postUsersHandler
+  )
 
 usersRouter
   .route('/:userId')

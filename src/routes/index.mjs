@@ -9,8 +9,8 @@ const router = Router()
 router.get('/', getRootHandler)
 router.use('/users', usersRouter)
 router.use('/articles', articlesRouter)
-router.use('/register', authRouter)
 router.use('/login', authRouter)
+router.use('/register', authRouter)
 
 router.post('/theme', (req, res) => {
   const { theme } = req.body
