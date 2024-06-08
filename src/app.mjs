@@ -52,7 +52,6 @@ app.use((req, res, next) => {
 app.use(passport.initialize())
 app.use(passport.session())
 
-
 app.use((req, res, next) => {
   res.locals.theme = req.cookies.theme || 'light'
   res.locals.error = req.flash('error')
@@ -70,7 +69,7 @@ app.use((req, res, next) => {
 app.use(authRouter)
 
 app.use((req, res, next) => {
-  res.locals.user = req.user || null 
+  res.locals.user = req.user || null
   next()
 })
 
