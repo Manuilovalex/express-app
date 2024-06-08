@@ -49,6 +49,16 @@ export async function findUserById(id) {
   }
 }
 
+export async function findUserByEmail(email) {
+  try {
+    const users = getUsersFromFile()
+    const user = users.find((user) => user.email === email)
+    return user || null
+  } catch (error) {
+    throw new Error(`Failed to find user by email: ${error.message}`)
+  }
+}
+
 function getUsersFromFile() {
   try {
     const data = readFileSync(dataFilePath, 'utf-8')

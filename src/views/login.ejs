@@ -12,10 +12,14 @@
 <body class="<%= theme %>">
   <div class="container">
     <h1>Login</h1>
-    <% if (error && error.length> 0) { %>
-      <div class="error-message">
-        <%= error[0] %>
-      </div>
+    <% if (error_messages.length> 0) { %>
+      <ul  style="color: red;">
+        <% error_messages.forEach(function(error) { %>
+          <li>
+            <%= error %>
+          </li>
+          <% }) %>
+      </ul>
       <% } %>
         <form action="/login" method="post">
           <div>

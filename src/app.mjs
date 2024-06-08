@@ -9,7 +9,6 @@ import ejs from 'ejs'
 import { passport } from './config/passport-config.mjs'
 import router from './routes/index.mjs'
 import authRouter from './routes/authRoutes.mjs'
-import protectedRouter from './routes/protectedRoutes.mjs'
 import { errorHandler } from './middlewares/errorHandler.mjs'
 import { logger } from './middlewares/logger.mjs'
 import { ensureAuthenticated } from './middlewares/authMiddleware.mjs'
@@ -43,17 +42,25 @@ app.use(
 )
 
 app.use(flash())
-app.use(passport.session())
+
+app.use((req, res, next) => {
+  res.locals.success_messages = req.flash('success')
+  res.locals.error_messages = req.flash('error')
+  next()
+})
+
 app.use(passport.initialize())
+app.use(passport.session())
+
 
 app.use((req, res, next) => {
   res.locals.theme = req.cookies.theme || 'light'
   res.locals.error = req.flash('error')
+  res.locals.success = req.flash('success')
   res.locals.user = req.user || null
   next()
 })
 
-// Middleware для проверки аутентификации и логирования
 app.use((req, res, next) => {
   console.log('Current session:', req.session)
   console.log('Current user:', req.user)
@@ -63,7 +70,7 @@ app.use((req, res, next) => {
 app.use(authRouter)
 
 app.use((req, res, next) => {
-  res.locals.user = req.user || null // доступ к текущему пользователю во всех шаблонах
+  res.locals.user = req.user || null 
   next()
 })
 
@@ -77,7 +84,6 @@ app.get('/', (req, res) => {
 })
 
 app.use(router)
-app.use(protectedRouter)
 
 app.post('/theme', (req, res) => {
   const { theme } = req.body

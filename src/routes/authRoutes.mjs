@@ -2,6 +2,7 @@ import { Router } from 'express'
 import { passport } from '../config/passport-config.mjs'
 import { createUser } from '../services/userService.mjs'
 import { forwardAuthenticated } from '../middlewares/authMiddleware.mjs'
+import { findUserByEmail } from '../services/userService.mjs'
 
 const authRouter = Router()
 
@@ -13,44 +14,36 @@ authRouter.get('/register', forwardAuthenticated, (req, res) => {
   res.render('register', { error: req.flash('error') })
 })
 
-authRouter.use((req, res, next) => {
-  console.log('Current session before saving:', req.session)
-  next()
-})
-
 authRouter.post('/register', async (req, res, next) => {
   try {
     const { username, email, password } = req.body
+    const existingUser = await findUserByEmail(email)
+    if (existingUser) {
+      req.flash('error', 'Email already registered.')
+      return res.redirect('/register')
+    }
     const user = await createUser({ username, email, password })
-
-    req.session.justRegistered = true
-
     req.login(user, (err) => {
       if (err) return next(err)
-      console.log('User logged in:', req.user)
-      console.log('Session ID:', req.sessionID)
-      req.session.save((err) => {
-        if (err) return next(err)
-        console.log('Session saved:', req.sessionID)
-        return res.redirect('/')
-      })
+      return res.redirect('/login')
     })
   } catch (error) {
     req.flash('error', 'Registration failed.')
-    return res.redirect('/register')
+    res.redirect('/register')
   }
 })
 
-authRouter.use((req, res, next) => {
-  console.log('Current session after saving:', req.session)
-  next()
-})
-
 authRouter.post('/login', (req, res, next) => {
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: true
+  passport.authenticate('local', (err, user, info) => {
+    if (err) return next(err)
+    if (!user) {
+      req.flash('error', 'Incorrect email or password, please try again.')
+      return res.redirect('/login')
+    }
+    req.logIn(user, (err) => {
+      if (err) return next(err)
+      res.redirect('/')
+    })
   })(req, res, next)
 })
 

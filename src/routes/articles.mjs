@@ -10,7 +10,6 @@ import { validateArticleData } from '../middlewares/validateArticle.mjs'
 import { checkArticlesEmpty } from '../middlewares/checkArticlesEmpty.mjs'
 import { ensureAuthenticated } from '../middlewares/authMiddleware.mjs'
 
-
 const articlesRouter = Router()
 
 articlesRouter
