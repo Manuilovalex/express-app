@@ -1,26 +1,19 @@
 import { Router } from 'express'
-import {
-  deleteArticleByIdHandler,
-  getArticleByIdHandler,
-  getArticlesHandler,
-  postArticlesHandler,
-  putArticleByIdHandler
-} from '../controllers/articles.mjs'
+import { createArticle, getArticles, getArticle, deleteArticle, updateArticle } from '../controllers/articles.mjs'
 import { validateArticleData } from '../middlewares/validateArticle.mjs'
-import { checkArticlesEmpty } from '../middlewares/checkArticlesEmpty.mjs'
 import { ensureAuthenticated } from '../middlewares/authMiddleware.mjs'
 
 const articlesRouter = Router()
 
 articlesRouter
   .route('/')
-  .get(ensureAuthenticated, checkArticlesEmpty, getArticlesHandler)
-  .post(ensureAuthenticated, validateArticleData, postArticlesHandler)
+  .get(ensureAuthenticated, getArticles)
+  .post(ensureAuthenticated, validateArticleData, createArticle)
 
 articlesRouter
-  .route('/:articleId')
-  .get(ensureAuthenticated, getArticleByIdHandler)
-  .delete(ensureAuthenticated, deleteArticleByIdHandler)
-  .put(ensureAuthenticated, validateArticleData, putArticleByIdHandler)
+  .route('/:id')
+  .get(ensureAuthenticated, getArticle)
+  .delete(ensureAuthenticated, deleteArticle)
+  .put(ensureAuthenticated, validateArticleData, updateArticle)
 
 export default articlesRouter

@@ -1,81 +1,67 @@
-import { articles } from '../data/articles.mjs'
+import { ObjectId } from 'mongodb'
+import { connectDB } from '../config/mongoConfig.mjs'
 
-const getArticlesHandler = (req, res) => {
-  res.render('articles/index.ejs', { articles })
+export const createArticle = async (req, res, next) => {
+  try {
+    const db = await connectDB()
+    const articles = db.collection('articles')
+    const result = await articles.insertOne(req.body)
+    res.status(201).send(`Article created with id ${result.insertedId}`)
+  } catch (error) {
+    next(error)
+  }
 }
 
-const postArticlesHandler = (req, res) => {
-  const { title, content } = req.body
-  const newId = articles.length > 0 ? Math.max(...articles.map((u) => u.id)) + 1 : 1
-
-  if (!title || !content) {
-    return res.status(400).send('Invalid data. Title and content are required.')
+export const getArticles = async (req, res, next) => {
+  try {
+    const db = await connectDB()
+    const articles = db.collection('articles')
+    const articlesList = await articles.find({}).toArray()
+    res.status(200).json(articlesList)
+  } catch (error) {
+    next(error)
   }
-
-  const newArticle = { id: newId, title, content }
-  articles.push(newArticle)
-  res.status(201).send(newArticle)
 }
 
-const getArticleByIdHandler = (req, res) => {
-  const articleId = parseInt(req.params['articleId'])
-
-  if (isNaN(articleId)) {
-    return res.status(400).send('Article ID must be a number')
+export const getArticle = async (req, res, next) => {
+  try {
+    const db = await connectDB()
+    const articles = db.collection('articles')
+    const article = await articles.findOne({ _id: new ObjectId(req.params.id) })
+    if (!article) {
+      return res.status(404).send('Article not found')
+    }
+    res.status(200).json(article)
+  } catch (error) {
+    next(error)
   }
-
-  const article = articles.find((a) => a.id === articleId)
-
-  if (!article) {
-    return res.status(404).send(`Article with id ${articleId} not found`)
-  }
-
-  res.render('articles/article.ejs', { article })
 }
 
-const deleteArticleByIdHandler = (req, res) => {
-  const articleId = parseInt(req.params['articleId'])
+export const deleteArticle = async (req, res, next) => {
+  try {
+    const db = await connectDB()
+    const articles = db.collection('articles')
+    const result = await articles.deleteOne({ _id: new ObjectId(req.params.id) })
 
-  if (isNaN(articleId)) {
-    return res.status(400).send('Article ID must be a number')
+    if (result.deletedCount === 0) {
+      return res.status(404).send('Article not found')
+    }
+    res.status(200).send(`Article with id ${req.params.id} deleted`)
+  } catch (error) {
+    next(error)
   }
-
-  const articleIndex = articles.findIndex((a) => a.id === articleId)
-
-  if (articleIndex === -1) {
-    return res.status(404).send(`Article with id ${articleId} not found`)
-  }
-
-  articles.splice(articleIndex, 1)
-  res.send(`Article with id ${articleId} deleted`)
 }
 
-const putArticleByIdHandler = (req, res) => {
-  const articleId = parseInt(req.params['articleId'])
-
-  if (isNaN(articleId)) {
-    return res.status(400).send('Article ID must be a number')
+export const updateArticle = async (req, res, next) => {
+  try {
+    const db = await connectDB()
+    const articles = db.collection('articles')
+    const result = await articles.updateOne({ _id: new ObjectId(req.params.id) }, { $set: req.body })
+    if (result.matchedCount === 0) {
+      return res.status(404).send('Article not found')
+    }
+    res.status(200).send(`Article with id ${req.params.id} updated`)
+  } catch (error) {
+    next(error)
   }
-
-  const { title, content } = req.body
-  const articleIndex = articles.findIndex((a) => a.id === articleId)
-
-  if (articleIndex === -1) {
-    return res.status(404).send(`Article with id ${articleId} not found`)
-  }
-
-  if (!title || !content) {
-    return res.status(400).send('Invalid data. Title and content are required.')
-  }
-
-  articles[articleIndex] = { id: articleId, title, content }
-  res.send(articles[articleIndex])
-}
-
-export {
-  getArticlesHandler,
-  postArticlesHandler,
-  getArticleByIdHandler,
-  deleteArticleByIdHandler,
-  putArticleByIdHandler
 }

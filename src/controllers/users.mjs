@@ -1,77 +1,67 @@
-import { users } from '../data/users.mjs'
+import { ObjectId } from 'mongodb'
+import { connectDB } from '../config/mongoConfig.mjs'
 
-const getUsersHandler = (req, res) => {
-  res.render('users/index.pug', { users })
+export const createUser = async (req, res, next) => {
+  try {
+    const db = await connectDB()
+    const users = db.collection('users')
+    const result = await users.insertOne(req.body)
+    res.status(201).send(`User created with id ${result.insertedId}`)
+  } catch (error) {
+    next(error)
+  }
 }
 
-let nextUserId = users.length > 0 ? Math.max(...users.map((u) => u.id)) + 1 : 1
-
-const postUsersHandler = (req, res) => {
-  const { username, email } = req.body
-  const newId = users.length > 0 ? Math.max(...users.map((u) => u.id)) + 1 : 1
-
-  if (!username || !email) {
-    return res.status(400).send('Invalid data. Username and email are required.')
+export const getUsers = async (req, res, next) => {
+  try {
+    const db = await connectDB()
+    const users = db.collection('users')
+    const usersList = await users.find({}).toArray()
+    res.status(200).json(usersList)
+  } catch (error) {
+    next(error)
   }
-
-  const newUser = { id: newId, username, email }
-  users.push(newUser)
-  res.status(201).send(newUser)
 }
 
-const getUserByIdHandler = (req, res) => {
-  const userId = parseInt(req.params['userId'])
-
-  if (isNaN(userId)) {
-    return res.status(400).send('User ID must be a number')
+export const getUser = async (req, res, next) => {
+  try {
+    const db = await connectDB()
+    const users = db.collection('users')
+    const user = await users.findOne({ _id: new ObjectId(req.params.id) })
+    if (!user) {
+      return res.status(404).send('User not found')
+    }
+    res.status(200).json(user)
+  } catch (error) {
+    next(error)
   }
-
-  const user = users.find((u) => u.id === userId)
-
-  if (!user) {
-    return res.status(404).send(`User with id ${userId} not found`)
-  }
-
-  res.render('users/user.pug', { user })
 }
 
-const deleteUserByIdHandler = (req, res) => {
-  const userId = parseInt(req.params['userId'])
+export const deleteUser = async (req, res, next) => {
+  try {
+    const db = await connectDB()
+    const users = db.collection('users')
+    const result = await users.deleteOne({ _id: new ObjectId(req.params.id) })
 
-  if (isNaN(userId)) {
-    return res.status(400).send('User ID must be a number')
+    if (result.deletedCount === 0) {
+      return res.status(404).send('User not found')
+    }
+    res.status(200).send(`User with id ${req.params.id} deleted`)
+  } catch (error) {
+    next(error)
   }
-
-  const userIndex = users.findIndex((u) => u.id === userId)
-
-  if (userIndex === -1) {
-    return res.status(404).send(`User with id ${userId} not found`)
-  }
-
-  users.splice(userIndex, 1)
-  res.status(200).send(`User with id ${userId} deleted`)
 }
 
-const putUserByIdHandler = (req, res) => {
-  const userId = parseInt(req.params['userId'])
-
-  if (isNaN(userId)) {
-    return res.status(400).send('User ID must be a number')
+export const updateUser = async (req, res, next) => {
+  try {
+    const db = await connectDB()
+    const users = db.collection('users')
+    const result = await users.updateOne({ _id: new ObjectId(req.params.id) }, { $set: req.body })
+    if (result.matchedCount === 0) {
+      return res.status(404).send('User not found')
+    }
+    res.status(200).send(`User with id ${req.params.id} updated`)
+  } catch (error) {
+    next(error)
   }
-
-  const { username, email } = req.body
-  const userIndex = users.findIndex((u) => u.id === userId)
-
-  if (userIndex === -1) {
-    return res.status(404).send(`User with id ${userId} not found`)
-  }
-
-  if (!username || !email) {
-    return res.status(400).send('Invalid data. Username and email are required.')
-  }
-
-  users[userIndex] = { id: userId, username, email }
-  res.status(200).send(users[userIndex])
 }
-
-export { getUsersHandler, postUsersHandler, getUserByIdHandler, deleteUserByIdHandler, putUserByIdHandler }

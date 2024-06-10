@@ -9,7 +9,7 @@ export const validateUserData = (req, res, next) => {
   const { error } = userSchema.validate(req.body)
 
   if (error) {
-    return res.status(400).send(`error: ${error.message}`)
+    return res.status(400).send(`Error: ${error.message}`)
   }
 
   next()

@@ -1,29 +1,20 @@
 import { Router } from 'express'
-import { getRootHandler } from '../controllers/root.mjs'
-import usersRouter from './users.mjs'
-import articlesRouter from './articles.mjs'
-import authRouter from './authRoutes.mjs'
+import { createUser, getUsers, getUser, deleteUser, updateUser } from '../controllers/users.mjs'
+import { validateUserData } from '../middlewares/validationUser.mjs'
+import { ensureAuthenticated } from '../middlewares/authMiddleware.mjs'
+import { checkUsersEmpty } from '../middlewares/checkUsersEmpty.mjs'
 
-const router = Router()
+const usersRouter = Router()
 
-router.get('/', getRootHandler)
-router.use('/users', usersRouter)
-router.use('/articles', articlesRouter)
-router.use('/login', authRouter)
-router.use('/register', authRouter)
+usersRouter
+  .route('/')
+  .get(ensureAuthenticated, checkUsersEmpty, getUsers)
+  .post(ensureAuthenticated, validateUserData, createUser)
 
-router.post('/theme', (req, res) => {
-  const { theme } = req.body
-  if (!theme) {
-    return res.status(400).send('Theme is required')
-  }
-  res.cookie('theme', theme, { maxAge: 900000, httpOnly: true })
-  res.send(`Theme set to ${theme}`)
-})
+usersRouter
+  .route('/:id')
+  .get(ensureAuthenticated, getUser)
+  .delete(ensureAuthenticated, deleteUser)
+  .put(ensureAuthenticated, validateUserData, updateUser)
 
-router.get('/theme', (req, res) => {
-  const theme = req.cookies.theme || 'default'
-  res.send(`Current theme is ${theme}`)
-})
-
-export default router
+export default usersRouter

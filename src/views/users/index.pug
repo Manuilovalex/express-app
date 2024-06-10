@@ -1,4 +1,4 @@
-doctype html
+octype html
 html(lang="en")
   head
     meta(charset="UTF-8")
@@ -8,12 +8,12 @@ html(lang="en")
     title Users
   body(class=theme)
     .container
-      h1 App Express & PUG
+      h1 App Express & Pug
       h2 Users
       ul
         each user in users
           li
-            a(href=`/users/${user.id}`) user id: #{user.id}
+            a(href=`/users/${user._id}`) User id: #{user._id}
       button(onclick="goBack()") back
     script.
       function goBack() {
