@@ -14,9 +14,12 @@ import { logger } from './middlewares/logger.mjs'
 import { ensureAuthenticated } from './middlewares/authMiddleware.mjs'
 import usersRouter from './routes/users.mjs'
 import articlesRouter from './routes/articles.mjs'
+import connectDB from './config/mongoConfig.mjs'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
+
+connectDB()
 
 const PORT = process.env.PORT || 3000
 const app = express()
@@ -34,7 +37,7 @@ app.engine('ejs', ejs.renderFile)
 
 app.use(
   session({
-    secret: 'key',
+    secret: process.env.SESSION_SECRET || 'key',
     resave: false,
     saveUninitialized: false,
     cookie: { secure: false }
