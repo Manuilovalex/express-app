@@ -12,3 +12,4 @@ build/
 *.js.map
 *.d.ts
 .env
+src/config.mjs
