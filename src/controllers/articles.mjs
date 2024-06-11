@@ -1,5 +1,8 @@
 import { ObjectId } from 'mongodb'
+
 import { connectDB } from '../config/mongoConfig.mjs'
+
+
 
 export const createArticle = async (req, res, next) => {
   try {
@@ -17,7 +20,7 @@ export const getArticles = async (req, res, next) => {
     const db = await connectDB()
     const articles = db.collection('articles')
     const articlesList = await articles.find({}).toArray()
-    res.status(200).json(articlesList)
+    res.status(200).render('articles/articles', { articles: articlesList, theme: 'default' })
   } catch (error) {
     next(error)
   }
@@ -31,7 +34,7 @@ export const getArticle = async (req, res, next) => {
     if (!article) {
       return res.status(404).send('Article not found')
     }
-    res.status(200).json(article)
+    res.status(200).render('articles/article', { article, theme: 'default' })
   } catch (error) {
     next(error)
   }

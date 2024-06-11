@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import flash from 'connect-flash'
 import ejs from 'ejs'
+import pug from 'pug'
 import { passport } from './config/passport-config.mjs'
 import router from './routes/index.mjs'
 import authRouter from './routes/authRoutes.mjs'
@@ -35,8 +36,9 @@ app.use(cookieParser())
 app.use(express.static(join(__dirname, 'public')))
 
 app.set('views', join(__dirname, 'views'))
-app.set('view engine', 'ejs')
 app.engine('ejs', ejs.renderFile)
+app.engine('pug', pug.renderFile)
+app.set('view engine', 'ejs')
 
 app.use(
   session({
