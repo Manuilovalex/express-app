@@ -10,11 +10,5 @@
     "username": "dan",
     "email": "Manuylov_aleks@ukr.net",
     "password": "$2a$10$azjlAfcl.USleneBHeGW6OPthS6y9S/S/.SmKhtuI0ik87B0O570O"
-  },
-    {
-      "_id": "62da801a-a7b0-49a9-8ceb-d8d261a0e558",
-      "username": "ban",
-      "email": "Manuylov_al@ukr.net",
-      "password": "$2a$10$azjlAfcl.USleneBHeGW6OPthS6y9S/S/.SmKhtuI0ik87B0O570O"
-    }
+  }
 ]
