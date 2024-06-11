@@ -13,7 +13,7 @@ html(lang="en")
       ul
         each user in users
           li
-            a(href=`/users/${user._id}`) Name: #{user.username}
+            a(href=`/users/${user._id}`) #{user.username}
       button(onclick="goBack()") back
     script.
       function goBack() {
