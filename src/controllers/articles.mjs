@@ -2,8 +2,6 @@ import { ObjectId } from 'mongodb'
 
 import { connectDB } from '../config/mongoConfig.mjs'
 
-
-
 export const createArticle = async (req, res, next) => {
   try {
     const db = await connectDB()
