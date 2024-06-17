@@ -6,10 +6,19 @@ const userSchema = Joi.object({
 })
 
 export const validateUserData = (req, res, next) => {
-  const { error } = userSchema.validate(req.body)
+  const validate = (user) => {
+    return user.name && user.email
+  }
 
-  if (error) {
-    return res.status(400).send(`Error: ${error.message}`)
+  if (Array.isArray(req.body)) {
+    const invalidUsers = req.body.filter((user) => !validate(user))
+    if (invalidUsers.length > 0) {
+      return res.status(400).send('Invalid data. Name and email are required for each user.')
+    }
+  } else {
+    if (!validate(req.body)) {
+      return res.status(400).send('Invalid data. Name and email are required.')
+    }
   }
 
   next()

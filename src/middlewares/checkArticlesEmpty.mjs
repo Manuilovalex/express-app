@@ -1,4 +1,4 @@
-import {Article} from '../models/article.mjs'
+import { Article } from '../models/article.mjs'
 
 export const checkArticlesEmpty = async (req, res, next) => {
   try {
