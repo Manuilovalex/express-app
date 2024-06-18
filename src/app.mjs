@@ -8,7 +8,6 @@ import flash from 'connect-flash'
 import ejs from 'ejs'
 import pug from 'pug'
 import { passport } from './config/passport-config.mjs'
-import router from './routes/index.mjs'
 import authRouter from './routes/authRoutes.mjs'
 import { errorHandler } from './middlewares/errorHandler.mjs'
 import { logger } from './middlewares/logger.mjs'
@@ -89,8 +88,6 @@ app.get('/', (req, res) => {
   console.log('Session:', req.session)
   res.render('index', { user: req.user })
 })
-
-app.use(router)
 
 app.post('/theme', (req, res) => {
   const { theme } = req.body

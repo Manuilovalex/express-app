@@ -84,7 +84,7 @@ export const updateArticleOrArticles = async (req, res, next) => {
       const operations = req.body.map((article) => ({
         updateOne: {
           filter: { _id: new ObjectId(article._id) },
-          update: { $set: article }
+          update: { $set: { title: article.title, content: article.content } }
         }
       }))
       const result = await articles.bulkWrite(operations)
@@ -104,30 +104,16 @@ export const updateArticleOrArticles = async (req, res, next) => {
   }
 }
 
-export const replaceArticleOrArticles = async (req, res, next) => {
+export const replaceArticle = async (req, res, next) => {
   try {
     const db = await connectDB()
     const articles = db.collection('articles')
 
-    if (Array.isArray(req.body)) {
-      const operations = req.body.map((article) => ({
-        replaceOne: {
-          filter: { _id: new ObjectId(article._id) },
-          replacement: article
-        }
-      }))
-      const result = await articles.bulkWrite(operations)
-      if (result.matchedCount === 0) {
-        return res.status(404).send('No articles found to replace')
-      }
-      res.status(200).send(`Replaced ${result.modifiedCount} articles`)
-    } else {
-      const result = await articles.replaceOne({ _id: new ObjectId(req.params.id) }, req.body)
-      if (result.matchedCount === 0) {
-        return res.status(404).send('Article not found')
-      }
-      res.status(200).send(`Article with id ${req.params.id} replaced`)
+    const result = await articles.replaceOne({ _id: new ObjectId(req.params.id) }, req.body)
+    if (result.matchedCount === 0) {
+      return res.status(404).send('Article not found')
     }
+    res.status(200).send(`Article with id ${req.params.id} replaced`)
   } catch (error) {
     next(error)
   }

@@ -5,26 +5,26 @@ import {
   createArticleOrArticles,
   deleteArticleOrArticles,
   updateArticleOrArticles,
-  replaceArticleOrArticles
+  replaceArticle
 } from '../controllers/articles.mjs'
 import { validateArticleData } from '../middlewares/validateArticle.mjs'
 import { ensureAuthenticated } from '../middlewares/authMiddleware.mjs'
+import { checkArticlesEmpty } from '../middlewares/checkArticlesEmpty.mjs'
 
 const articlesRouter = Router()
 
 articlesRouter
   .route('/')
-  .get(ensureAuthenticated, getArticles)
+  .get(ensureAuthenticated, checkArticlesEmpty, getArticles)
   .post(ensureAuthenticated, validateArticleData, createArticleOrArticles)
   .delete(ensureAuthenticated, deleteArticleOrArticles)
   .put(ensureAuthenticated, validateArticleData, updateArticleOrArticles)
-  .patch(ensureAuthenticated, validateArticleData, replaceArticleOrArticles)
 
 articlesRouter
   .route('/:id')
   .get(ensureAuthenticated, getArticle)
   .delete(ensureAuthenticated, deleteArticleOrArticles)
   .put(ensureAuthenticated, validateArticleData, updateArticleOrArticles)
-  .patch(ensureAuthenticated, validateArticleData, replaceArticleOrArticles)
+  .patch(ensureAuthenticated, validateArticleData, replaceArticle)
 
 export default articlesRouter

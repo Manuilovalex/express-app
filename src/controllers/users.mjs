@@ -22,8 +22,8 @@ export const getUsers = async (req, res, next) => {
   try {
     const db = await connectDB()
     const users = db.collection('users')
-    const usersList = await users.find({}, { projection: { name: 1, email: 1 } }).toArray()
-    res.status(200).render('users/users', { users: usersList, theme: 'default' })
+    const usersList = await users.find({}, { projection: { username: 1, email: 1 } }).toArray()
+    res.status(200).render('users/users.pug', { users: usersList, theme: 'default' })
   } catch (error) {
     next(error)
   }
@@ -33,11 +33,11 @@ export const getUser = async (req, res, next) => {
   try {
     const db = await connectDB()
     const users = db.collection('users')
-    const user = await users.findOne({ _id: new ObjectId(req.params.id) }, { projection: { name: 1, email: 1 } })
+    const user = await users.findOne({ _id: new ObjectId(req.params.id) }, { projection: { username: 1, email: 1 } })
     if (!user) {
       return res.status(404).send('User not found')
     }
-    res.status(200).render('users/user', { user, theme: 'default' })
+    res.status(200).render('users/user.pug', { user, theme: 'default' })
   } catch (error) {
     next(error)
   }
@@ -74,7 +74,7 @@ export const updateUserOrUsers = async (req, res, next) => {
       const operations = req.body.map((user) => ({
         updateOne: {
           filter: { _id: new ObjectId(user._id) },
-          update: { $set: user }
+          update: { $set: { username: user.username, email: user.email } }
         }
       }))
       const result = await users.bulkWrite(operations)
@@ -94,29 +94,16 @@ export const updateUserOrUsers = async (req, res, next) => {
   }
 }
 
-export const replaceUserOrUsers = async (req, res, next) => {
+export const replaceUser = async (req, res, next) => {
   try {
     const db = await connectDB()
     const users = db.collection('users')
-    if (Array.isArray(req.body)) {
-      const operations = req.body.map((user) => ({
-        replaceOne: {
-          filter: { _id: new ObjectId(user._id) },
-          replacement: user
-        }
-      }))
-      const result = await users.bulkWrite(operations)
-      if (result.matchedCount === 0) {
-        return res.status(404).send('No users found to replace')
-      }
-      res.status(200).send(`Replaced ${result.modifiedCount} users`)
-    } else {
-      const result = await users.replaceOne({ _id: new ObjectId(req.params.id) }, req.body)
-      if (result.matchedCount === 0) {
-        return res.status(404).send('User not found')
-      }
-      res.status(200).send(`User with id ${req.params.id} replaced`)
+
+    const result = await users.replaceOne({ _id: new ObjectId(req.params.id) }, req.body)
+    if (result.matchedCount === 0) {
+      return res.status(404).send('User not found')
     }
+    res.status(200).send(`User with id ${req.params.id} replaced`)
   } catch (error) {
     next(error)
   }

@@ -7,7 +7,7 @@ const userSchema = Joi.object({
 
 export const validateUserData = (req, res, next) => {
   const validate = (user) => {
-    return user.name && user.email
+    return user.username && user.email
   }
 
   if (Array.isArray(req.body)) {
