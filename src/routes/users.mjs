@@ -5,7 +5,8 @@ import {
   createUserOrUsers,
   deleteUserOrUsers,
   updateUserOrUsers,
-  replaceUser
+  replaceUser,
+  getUserStats
 } from '../controllers/users.mjs'
 import { validateUserData } from '../middlewares/validationUser.mjs'
 import { ensureAuthenticated } from '../middlewares/authMiddleware.mjs'
@@ -19,6 +20,10 @@ usersRouter
   .post(ensureAuthenticated, validateUserData, createUserOrUsers)
   .delete(ensureAuthenticated, deleteUserOrUsers)
   .put(ensureAuthenticated, validateUserData, updateUserOrUsers)
+
+usersRouter
+  .route('/stats')
+  .get(ensureAuthenticated, getUserStats)
 
 usersRouter
   .route('/:id')

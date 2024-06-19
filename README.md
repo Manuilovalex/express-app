@@ -1,83 +1,133 @@
 # My Express Server
 
 ## Технологии:
+
 В данном проекте используются следующие технологии:<br>
+
 #### Node.js<br>
 
 #### Express.js<br>
 
 #### MongoDB Atlas<br><br>
 
+## Обновлено(ДЗ 64):
 
-## Обновлено(ДЗ 63):
+### Использование курсоров и агрегационных запросов в MongoDB через сервер Express
+
+#### articles/ :
+
+1.  Модифицирована функция getArticles, особенности:<br>
+
+Функция getArticles асинхронно извлекает статьи из базы данных MongoDB, применяя агрегационный<br>
+pipeline для выполнения различных операций: <br>
+
+1. Ограничение вывода на экран - 5 статей<br>
+
+2. Сортировка по длине контента от большего к меньшему <br>
+
+3. Добавление поля contentLength с длиной контента в символах
+
+Рендерит страницу с полученным списком статей в шаблон: /articles <br>
+
+2.  Добавлена функция getArticles, особенности:<br>
+
+Функция getArticleStats асинхронно извлекает статистику статей из базы данных MongoDB<br>
+с использованием агрегационного pipeline.<br>
+Pipeline включает операции группировки для вычисления средней длины контента и подсчета общего числа статей.<br>
+Результат агрегации передается в шаблон articles/stats, где происходит рендеринг страницы с отображением <br>
+средней длины контента и общего числа статей.<br>
+
+#### users/ :
+
+1.Модифицирована функция getUsers, особенности:<br>
+
+Функция getUsers асинхронно извлекает данные пользователей из базы данных MongoDB: <br>
+
+1. Ограничение вывода на экран - 5 пользователей<br>
+2. Преобразует данные, полученные с курсора, в массив объектов пользователей.<br>
+3. Создает курсор для выполнения запроса find() к коллекции users, указывая поля username,<br>
+   age и email для проекции.
+4. Рендерит страницу с полученным списком пользователей шаблон users/stats<br>
+
+Добавлена функция getUserStats агрегирует данные пользователей, чтобы вычислить средний возраст <br>
+пользователей, общее количество пользователей и уникальное количество электронных адресов.<br>
+Результаты запроса отображаются на веб-странице в шаблоне users/stats.pug
 
 #### 1.Добавлена возможность создания двуx и более пользователей:<br>
+
 Пример для создания двух пользователей: <br>
 
 POST /users:
 
 [
-  {
-    "username": "exampleUser1",
-    "email": "user1@example.com"
-  },
-  {
-    "username": "exampleUser2",
-    "email": "user2@example.com"
-  }
+{
+"username": "exampleUser1",
+"email": "user1@example.com"
+},
+{
+"username": "exampleUser2",
+"email": "user2@example.com"
+}
 ]<br>
 
-при успешном созднии  Users created with id's: ID1, ID2, ...<br>
+при успешном созднии Users created with id's: ID1, ID2, ...<br>
 
 #### 2.Добавлена возможность обновления двуx и более пользователей:<br>
+
 Пример для обновления для одного пользователя, и для двух пользователей: <br>
 
 PUT /users/:id (для обновления одного пользователя)<br>
 
 {
-  "username": "updatedUser",
-  "email": "updated@example.com"
+"username": "updatedUser",
+"email": "updated@example.com"
 }<br>
 
 PUT /users (для обновления нескольких пользователей)<br>
 
 [
-  {
-    "_id": "ID1",
-    "username": "updatedUser1",
-    "email": "updated1@example.com"
-  },
-  {
-    "_id": "ID2",
-    "username": "updatedUser2",
-    "email": "updated2@example.com"
-  }
+{
+"_id": "ID1",
+"username": "updatedUser1",
+"age" : "15",
+"email": "updated1@example.com"
+},
+{
+"_id": "ID2",
+"username": "updatedUser2",
+"age" : "15",
+"email": "updated2@example.com"
+}
 ]<br>
 
 либо обновление одного значения пользователя:<br>
 
 [
-  {
-    "_id": "ID1",
-    "username": "updatedUser2",
-  },
-  {
-    "_id": "ID2",
-    "email": "updated3@example.com"
-  }
+{
+"_id": "ID1",
+"age" : "15",
+"username": "updatedUser2",
+},
+{
+"_id": "ID2",
+"age" : "18",
+"email": "updated3@example.com"
+}
 ]<br>
 
 При успешном обновлении одного пользователя: User with id "ID" updated<br>
 При успешном обновлении нескольких пользователей: Updated "count" users<br>
 
 ##### Замена пользователя(replaceOne):<br>
+
 пример замены пользователя:<br>
 
 PUT /users/:id<br>
 
 {
-  "username": "newUser",
-  "email": "new@example.com"
+"username": "newUser",
+"age" : "20",
+"email": "new@example.com"
 }<br>
 
 При успешной замене одного пользователя: User with id "ID" replaced<br>
@@ -93,15 +143,15 @@ DELETE /users/:id (для удаления одного пользователя
 
 DELETE /users (для удаления нескольких пользователей)<br>
 [
-  "ID1",
-  "ID2"
+"ID1",
+"ID2"
 ]<br>
 
 При успешном удалении нескольких пользователей: Deleted "count" users
 
 #### 5.Для маршрутов articles, все тоже самое как и для users<br>
 
-шаблон:  {
+шаблон: {
 "title": "New Article1",
 "content": "Content of the new article1."
 }
@@ -214,10 +264,11 @@ c статусом 200
 ### validateUserData (for /users)
 
 проверяет данные запроса, чтобы убедиться, что в теле запроса присутствуют поля "username" и "email",<br>
-а так же введенные данные соответствуют своим типам(string, email)
+а так же введенные данные соответствуют своим типам(string, number, email)
 
 пример - {
 "username": "newuser",
+"age": 10,
 "email": "newuser@example.com"
 }
 Если одно или оба этих поля отсутствуют, либо введен неправильный тип данных мидлвар отправляет ответ с ошибкой и статусом 400<br>

@@ -28,18 +28,37 @@ export const getArticles = async (req, res, next) => {
     const pageSize = parseInt(req.query.limit) || 5
     const skip = (page - 1) * pageSize
 
-    const cursor = articles
-      .find({}, { projection: { title: 1, content: 1 } })
-      .skip(skip)
-      .limit(pageSize)
+    const pipeline = [
+      {
+        $addFields: {
+          contentLength: { $strLenCP: '$content' }
+        }
+      },
+      {
+        $sort: { contentLength: -1 }
+      },
+      {
+        $skip: skip
+      },
+      {
+        $limit: pageSize
+      },
+      {
+        $project: {
+          title: 1,
+          content: 1
+        }
+      }
+    ]
 
+    const cursor = articles.aggregate(pipeline)
     const articlesList = await cursor.toArray()
 
     res.status(200).render('articles/articles', {
       articles: articlesList,
-      theme: 'default',
-      page: page, // Передача значення page
-      pageSize: pageSize // Передача значення pageSize
+      theme: res.locals.theme,
+      page: page,
+      pageSize: pageSize
     })
   } catch (error) {
     next(error)
@@ -69,7 +88,7 @@ export const getArticleStats = async (req, res, next) => {
     res.status(200).render('articles/stats', {
       avgContentLength: stats.avgContentLength,
       count: stats.count,
-      theme: 'default'
+      theme: res.locals.theme
     })
   } catch (error) {
     next(error)
@@ -90,7 +109,7 @@ export const getArticle = async (req, res, next) => {
       return res.status(404).send('Article not found')
     }
 
-    res.status(200).render('articles/article', { article, theme: 'default' })
+    res.status(200).render('articles/article', { article, theme: res.locals.theme })
   } catch (error) {
     next(error)
   }

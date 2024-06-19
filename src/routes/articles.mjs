@@ -14,14 +14,14 @@ import { checkArticlesEmpty } from '../middlewares/checkArticlesEmpty.mjs'
 
 const articlesRouter = Router()
 
-articlesRouter.get('/stats', ensureAuthenticated, getArticleStats)
-
 articlesRouter
   .route('/')
   .get(ensureAuthenticated, checkArticlesEmpty, getArticles)
   .post(ensureAuthenticated, validateArticleData, createArticleOrArticles)
   .delete(ensureAuthenticated, deleteArticleOrArticles)
   .put(ensureAuthenticated, validateArticleData, updateArticleOrArticles)
+
+articlesRouter.get('/stats', ensureAuthenticated, getArticleStats)
 
 articlesRouter
   .route('/:id')

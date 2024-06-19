@@ -43,7 +43,7 @@ app.use(
   session({
     secret: process.env.SESSION_SECRET || 'key',
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: { secure: false }
   })
 )
@@ -92,6 +92,7 @@ app.get('/', (req, res) => {
 app.post('/theme', (req, res) => {
   const { theme } = req.body
   res.cookie('theme', theme, { maxAge: 900000, httpOnly: true })
+  req.session.theme = theme
   res.redirect('back')
 })
 
