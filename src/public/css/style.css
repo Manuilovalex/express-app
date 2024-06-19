@@ -16,11 +16,11 @@ body.dark {
   background-color: #333;
   color: #d4d1d1;
   a {
-    color:  #d4d1d1;;
-  };
+    color: #d4d1d1;
+  }
   a:hover {
-  color: #8a8787;
-}
+    color: #8a8787;
+  }
 }
 
 .container {
@@ -77,7 +77,6 @@ button.authLink {
   width: 100px;
 }
 
-
 button:hover {
   background-color: #82bcdb;
 }
@@ -117,4 +116,11 @@ select {
 
 .hidden {
   display: none;
+}
+
+.prev,
+.next {
+  color: #5ca1cc;
+  margin: 15px;
+  padding: 15px;
 }

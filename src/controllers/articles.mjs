@@ -24,9 +24,53 @@ export const getArticles = async (req, res, next) => {
     const db = await connectDB()
     const articles = db.collection('articles')
 
-    const articlesList = await articles.find({}, { projection: { title: 1, content: 1 } }).toArray()
+    const page = parseInt(req.query.page) || 1
+    const pageSize = parseInt(req.query.limit) || 5
+    const skip = (page - 1) * pageSize
 
-    res.status(200).render('articles/articles', { articles: articlesList, theme: 'default' })
+    const cursor = articles
+      .find({}, { projection: { title: 1, content: 1 } })
+      .skip(skip)
+      .limit(pageSize)
+
+    const articlesList = await cursor.toArray()
+
+    res.status(200).render('articles/articles', {
+      articles: articlesList,
+      theme: 'default',
+      page: page, // Передача значення page
+      pageSize: pageSize // Передача значення pageSize
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const getArticleStats = async (req, res, next) => {
+  try {
+    const db = await connectDB()
+    const articles = db.collection('articles')
+
+    const pipeline = [
+      {
+        $group: {
+          _id: null,
+          avgContentLength: { $avg: { $strLenCP: '$content' } },
+          count: { $sum: 1 }
+        }
+      }
+    ]
+
+    const cursor = articles.aggregate(pipeline)
+    const result = await cursor.toArray()
+
+    const stats = result[0]
+
+    res.status(200).render('articles/stats', {
+      avgContentLength: stats.avgContentLength,
+      count: stats.count,
+      theme: 'default'
+    })
   } catch (error) {
     next(error)
   }

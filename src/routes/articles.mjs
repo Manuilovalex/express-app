@@ -5,13 +5,16 @@ import {
   createArticleOrArticles,
   deleteArticleOrArticles,
   updateArticleOrArticles,
-  replaceArticle
+  replaceArticle,
+  getArticleStats
 } from '../controllers/articles.mjs'
 import { validateArticleData } from '../middlewares/validateArticle.mjs'
 import { ensureAuthenticated } from '../middlewares/authMiddleware.mjs'
 import { checkArticlesEmpty } from '../middlewares/checkArticlesEmpty.mjs'
 
 const articlesRouter = Router()
+
+articlesRouter.get('/stats', ensureAuthenticated, getArticleStats)
 
 articlesRouter
   .route('/')
